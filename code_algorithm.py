@@ -1,9 +1,9 @@
 import os
 
 dictionary_sum = 0
-with open('input.txt', 'r') as f:
+with open('in.txt', 'r') as fp:
     text_sum = 0
-    text = f.read(1)
+    text = fp.read(1)
     dictionary = {}
     while text:
         text_sum += 1
@@ -12,16 +12,17 @@ with open('input.txt', 'r') as f:
         else:
             dictionary[text] = dictionary[text] + 1
 
-        text = f.read(1)
+        text = fp.read(1)
         # print(text)
     # print(dictionary)
 
     for val in dictionary.items():
         dictionary_sum = dictionary_sum + val
     if text_sum == dictionary_sum:
-        print("File read successfully")
+        print("Ok")
     else:
         print("Couldn't write to file")
         exit()
-        
+
 dictionary = dict(sorted(dictionary.items(), key=lambda item: item[1], reverse=True))
+# print(dictionary)
