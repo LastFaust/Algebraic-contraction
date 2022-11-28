@@ -30,3 +30,11 @@ dictionary = dict(sorted(dictionary.items(), key=lambda item: item[1], reverse=T
 work_interval = [0, 1]
 for i in dictionary:
     work_interval.append(dictionary[i] + work_interval[-1])
+
+f = open("output.txt", "wb+")
+print(len(dictionary))
+f.write(len(dictionary).to_bytes(1, "little"))
+for i in dictionary:
+    f.write(i.encode("ascii"))
+    f.write(dictionary[i].to_bytes(4, "little"))
+print(dictionary)
