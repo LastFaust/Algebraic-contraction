@@ -135,3 +135,6 @@ with open('input.txt', 'r') as file:
 
     write_bit >>= bit_len
     file.write(write_bit.to_bytes(1, "little"))
+
+file.close()
+print("U file has been succesfull coded")
