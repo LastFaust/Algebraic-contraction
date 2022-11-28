@@ -1,4 +1,8 @@
 import os
+global write_bit
+global bit_len
+write_bit = 0
+bit_len = 8
 
 def index_for_symbol(dictionary, text):
     j = 0
@@ -103,7 +107,7 @@ with open('input.txt', 'r') as file:
 
     high_v = int(low_v + work_interval[1] * diff / delete - 1)
     low_v = int(low_v + work_interval[0] * diff / delete)
-    
+
     while True:
         if high_v < half_q:
             bit_plus_follow(0, bit_to_follow, f)
@@ -121,3 +125,13 @@ with open('input.txt', 'r') as file:
             break
         low_v += low_v
         high_v += high_v + 1
+    bit_to_follow += 1
+    if low_v < first_q:
+        bit_plus_follow(0, bit_to_follow, f)
+        bit_to_follow = 0
+    else:
+        bit_plus_follow(1, bit_to_follow, f)
+        bit_to_follow = 0
+
+    write_bit >>= bit_len
+    file.write(write_bit.to_bytes(1, "little"))
