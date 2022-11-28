@@ -19,7 +19,7 @@ with open('in.txt', 'r') as f:
     for val in dictionary.items():
         dictionary_sum = dictionary_sum + val
     if text_sum == dictionary_sum:
-        print("Ok")
+        print("File read successfully")
     else:
         print("Couldn't write to file")
         exit()
