@@ -103,3 +103,21 @@ with open('input.txt', 'r') as file:
 
     high_v = int(low_v + work_interval[1] * diff / delete - 1)
     low_v = int(low_v + work_interval[0] * diff / delete)
+    
+    while True:
+        if high_v < half_q:
+            bit_plus_follow(0, bit_to_follow, f)
+            bit_to_follow=0
+        elif low_v >= half_q:
+            bit_plus_follow(1, bit_to_follow, f)
+            bit_to_follow=0
+            low_v -= half_q
+            high_v -= half_q
+        elif low_v >= first_q and high_v < third_q:
+            bit_to_follow += 1
+            low_v -= first_q
+            high_v -= first_q
+        else:
+            break
+        low_v += low_v
+        high_v += high_v + 1
