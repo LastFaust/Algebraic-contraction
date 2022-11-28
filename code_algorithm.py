@@ -4,6 +4,7 @@ global bit_len
 write_bit = 0
 bit_len = 8
 
+
 def index_for_symbol(dictionary, text):
     j = 0
     for i in dictionary:
@@ -44,33 +45,31 @@ with open('input.txt', 'r') as file:
         # print(text)
     # print(dictionary)
 
-    for val in dictionary.items():
+    for (symbol,val) in dictionary.items():
         dictionary_sum = dictionary_sum + val
     if text_sum == dictionary_sum:
-        print("File read successfully")
+        print("     File read successfully")
     else:
         print("Couldn't write to file")
         exit()
 
 dictionary = dict(sorted(dictionary.items(), key=lambda item: item[1], reverse=True))
-# print(dictionary)
 
 work_interval = [0, 1]
 for i in dictionary:
     work_interval.append(dictionary[i] + work_interval[-1])
 
 file = open("output.txt", "wb+")
-print(len(dictionary))
+# print(len(dictionary))
 file.write(len(dictionary).to_bytes(1, "little"))
 for i in dictionary:
     file.write(i.encode("ascii"))
     file.write(dictionary[i].to_bytes(4, "little"))
-print(dictionary)
+# print(dictionary)
 
-# алгоритм кодирования
-with open('input.txt', 'r') as file:
+with open('input.txt', 'r') as f:   # алгоритм кодирования
     low_interval = 0
-    high_interval = (1<<16)-1  # 2^16 интервал
+    high_interval = (1 << 16) - 1
     delete = work_interval[-1]
     diff = high_interval - low_interval + 1
     first_q = int(int(high_interval + 1) / 4)
@@ -78,59 +77,59 @@ with open('input.txt', 'r') as file:
     third_q = first_q * 3
     bit_to_follow = 0
 
-    text = file.read(1)
-    while text:
-        j = index_for_symbol(dictionary, text)
-        high_v = int(low_v + work_interval[j] * diff / delete - 1)
-        low_v = int(low_v + work_interval[j - 1] * diff / delete)
+    test = f.read(1)
+    while test:
+        index = index_for_symbol(dictionary, test)
+        high_interval = int(low_interval + work_interval[index] * diff / delete - 1)
+        low_interval = int(low_interval + work_interval[index - 1] * diff / delete)
 
         while True:
-            if high_v < half_q:
+            if high_interval < half_q:
                 bit_plus_follow(0, bit_to_follow, file)
                 bit_to_follow = 0
-            elif low_v >= half_q:
+            elif low_interval >= half_q:
                 bit_plus_follow(1, bit_to_follow, file)
                 bit_to_follow = 0
-                low_v -= half_q
-                high_v -= half_q
-            elif low_v >= first_q and high_v < third_q:
+                low_interval -= half_q
+                high_interval -= half_q
+            elif low_interval >= first_q and high_interval < third_q:
                 bit_to_follow += 1
-                low_v -= first_q
-                high_v -= first_q
+                low_interval -= first_q
+                high_interval -= first_q
             else:
                 break
-            low_v += low_v
-            high_v += high_v + 1
+            low_interval += low_interval
+            high_interval += high_interval + 1
 
-        diff = high_v - low_v + 1
-        text = file.read(1)
+        diff = high_interval - low_interval + 1
+        test = f.read(1)
 
-    high_v = int(low_v + work_interval[1] * diff / delete - 1)
-    low_v = int(low_v + work_interval[0] * diff / delete)
+    high_interval = int(low_interval + work_interval[1] * diff / delete - 1)
+    low_interval = int(low_interval + work_interval[0] * diff / delete)
 
     while True:
-        if high_v < half_q:
-            bit_plus_follow(0, bit_to_follow, f)
-            bit_to_follow=0
-        elif low_v >= half_q:
-            bit_plus_follow(1, bit_to_follow, f)
-            bit_to_follow=0
-            low_v -= half_q
-            high_v -= half_q
-        elif low_v >= first_q and high_v < third_q:
+        if high_interval < half_q:
+            bit_plus_follow(0, bit_to_follow, file)
+            bit_to_follow = 0
+        elif low_interval >= half_q:
+            bit_plus_follow(1, bit_to_follow, file)
+            bit_to_follow = 0
+            low_interval -= half_q
+            high_interval -= half_q
+        elif low_interval >= first_q and high_interval < third_q:
             bit_to_follow += 1
-            low_v -= first_q
-            high_v -= first_q
+            low_interval -= first_q
+            high_interval -= first_q
         else:
             break
-        low_v += low_v
-        high_v += high_v + 1
+        low_interval += low_interval
+        high_interval += high_interval + 1
     bit_to_follow += 1
-    if low_v < first_q:
-        bit_plus_follow(0, bit_to_follow, f)
+    if low_interval < first_q:
+        bit_plus_follow(0, bit_to_follow, file)
         bit_to_follow = 0
     else:
-        bit_plus_follow(1, bit_to_follow, f)
+        bit_plus_follow(1, bit_to_follow, file)
         bit_to_follow = 0
 
     write_bit >>= bit_len
