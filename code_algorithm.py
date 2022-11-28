@@ -26,3 +26,7 @@ with open('in.txt', 'r') as fp:
 
 dictionary = dict(sorted(dictionary.items(), key=lambda item: item[1], reverse=True))
 # print(dictionary)
+
+work_interval = [0, 1]
+for i in dictionary:
+    work_interval.append(dictionary[i] + work_interval[-1])
