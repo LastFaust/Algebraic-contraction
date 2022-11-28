@@ -23,3 +23,5 @@ with open('input.txt', 'r') as f:
     else:
         print("Couldn't write to file")
         exit()
+        
+dictionary = dict(sorted(dictionary.items(), key=lambda item: item[1], reverse=True))
