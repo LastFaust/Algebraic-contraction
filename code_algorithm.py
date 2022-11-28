@@ -1,9 +1,9 @@
 import os
 
 dictionary_sum = 0
-with open('in.txt', 'r') as fp:
+with open('in.txt', 'r') as f:
     text_sum = 0
-    text = fp.read(1)
+    text = f.read(1)
     dictionary = {}
     while text:
         text_sum += 1
@@ -12,7 +12,7 @@ with open('in.txt', 'r') as fp:
         else:
             dictionary[text] = dictionary[text] + 1
 
-        text = fp.read(1)
+        text = f.read(1)
         # print(text)
     # print(dictionary)
 
