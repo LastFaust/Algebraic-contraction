@@ -1,7 +1,7 @@
 import os
 
 dictionary_sum = 0
-with open('in.txt', 'r') as f:
+with open('input.txt', 'r') as f:
     text_sum = 0
     text = f.read(1)
     dictionary = {}
