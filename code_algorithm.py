@@ -1,9 +1,33 @@
 import os
 
+def index_for_symbol(dictionary, text):
+    j = 0
+    for i in dictionary:
+        if text == i:
+            return j + 2
+        j += 1
+
+def out_put_bit(bit, output_file):
+    global write_bit
+    global bit_len
+    write_bit >>= 1
+    if bit & 1:
+        write_bit |= 0x80
+    bit_len -= 1
+    #print(bit_len)
+    if bit_len == 0:
+        bit_len = 8
+        output_file.write(write_bit.to_bytes(1, "little"))
+
+def bit_plus_follow(bit, bittofollow, outputfile):
+    out_put_bit(bit, outputfile)
+    for _ in range(bittofollow):
+        out_put_bit(~bit, outputfile)
+
 dictionary_sum = 0
-with open('in.txt', 'r') as fp:
+with open('input.txt', 'r') as file:
     text_sum = 0
-    text = fp.read(1)
+    text = file.read(1)
     dictionary = {}
     while text:
         text_sum += 1
@@ -12,14 +36,14 @@ with open('in.txt', 'r') as fp:
         else:
             dictionary[text] = dictionary[text] + 1
 
-        text = fp.read(1)
+        text = file.read(1)
         # print(text)
     # print(dictionary)
 
     for val in dictionary.items():
         dictionary_sum = dictionary_sum + val
     if text_sum == dictionary_sum:
-        print("Ok")
+        print("File read successfully")
     else:
         print("Couldn't write to file")
         exit()
@@ -31,12 +55,12 @@ work_interval = [0, 1]
 for i in dictionary:
     work_interval.append(dictionary[i] + work_interval[-1])
 
-f = open("output.txt", "wb+")
+file = open("output.txt", "wb+")
 print(len(dictionary))
-f.write(len(dictionary).to_bytes(1, "little"))
+file.write(len(dictionary).to_bytes(1, "little"))
 for i in dictionary:
-    f.write(i.encode("ascii"))
-    f.write(dictionary[i].to_bytes(4, "little"))
+    file.write(i.encode("ascii"))
+    file.write(dictionary[i].to_bytes(4, "little"))
 print(dictionary)
 
 # алгоритм кодирования
@@ -49,3 +73,33 @@ with open('input.txt', 'r') as file:
     half_q = first_q * 2
     third_q = first_q * 3
     bit_to_follow = 0
+
+    text = file.read(1)
+    while text:
+        j = index_for_symbol(dictionary, text)
+        high_v = int(low_v + work_interval[j] * diff / delete - 1)
+        low_v = int(low_v + work_interval[j - 1] * diff / delete)
+
+        while True:
+            if high_v < half_q:
+                bit_plus_follow(0, bit_to_follow, file)
+                bit_to_follow = 0
+            elif low_v >= half_q:
+                bit_plus_follow(1, bit_to_follow, file)
+                bit_to_follow = 0
+                low_v -= half_q
+                high_v -= half_q
+            elif low_v >= first_q and high_v < third_q:
+                bit_to_follow += 1
+                low_v -= first_q
+                high_v -= first_q
+            else:
+                break
+            low_v += low_v
+            high_v += high_v + 1
+
+        diff = high_v - low_v + 1
+        text = file.read(1)
+
+    high_v = int(low_v + work_interval[1] * diff / delete - 1)
+    low_v = int(low_v + work_interval[0] * diff / delete)
