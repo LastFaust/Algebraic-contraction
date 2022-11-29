@@ -53,3 +53,5 @@ with open("coded_text.txt", "rb") as coded_text_file:
         third_q = first_q * 3
         val = 0
         
+        for iterator in range(16):
+            k = in_put_bit(output_file)
