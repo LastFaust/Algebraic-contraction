@@ -14,6 +14,16 @@ def in_put_bit(file):
     if (bit_len == 0):
         bit = file.read(1)
         read_bit = int.from_bytes(bit, "little")
+         if (bit == b""):
+            rubbish_bit += 1
+            read_bit = 255
+            if (rubbish_bit > 14):
+                exit(1)
+        bit_len = 8
+    t = read_bit & 1
+    read_bit >>= 1
+    bit_len -= 1
+    return t
 
 with open("coded_text.txt", "rb") as coded_text_file:
     text = ord(coded_text_file.read(1))
