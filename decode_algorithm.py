@@ -1,6 +1,19 @@
 import os
-global write_bit
+
+global read_bit
 global bit_len
+global rubbish_bit
+rubbish_bit = 0
+bit_len = 0
+read_bit = 0
+
+def in_put_bit(file):
+    global read_bit
+    global bit_len
+    global rubbish_bit
+    if (bit_len == 0):
+        bit = file.read(1)
+        read_bit = int.from_bytes(bit, "little")
 
 with open("coded_text.txt", "rb") as coded_text_file:
     text = ord(coded_text_file.read(1))
