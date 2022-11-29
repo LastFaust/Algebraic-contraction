@@ -19,5 +19,14 @@ with open("coded_text.txt", "rb") as coded_text_file:
     # print(work_interval)
 
     # алгоритм раскодирования
+    # алгоритм раскодирования
     with open("output.txt", "wb+") as output_file:
+        low_interval = 0
+        high_interval = (1 << 16) - 1
+        delete = work_interval[-1]
+        diff = high_interval - low_interval + 1
+        first_q = int(int(high_interval + 1) / 4)
+        half_q = first_q * 2
+        third_q = first_q * 3
+        val = 0
         
