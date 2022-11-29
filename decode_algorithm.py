@@ -19,6 +19,7 @@ def in_put_bit(file):
             read_bit = 255
             if (rubbish_bit > 14):
                 exit(1)
+
         bit_len = 8
     t = read_bit & 1
     read_bit >>= 1
@@ -27,7 +28,7 @@ def in_put_bit(file):
 
 with open("coded_text.txt", "rb") as coded_text_file:
     text = ord(coded_text_file.read(1))
-    print(text)
+    # print(text)
     dictionary = {}
     for i in range(text):
         key_hadder = coded_text_file.read(1).decode('ascii')
@@ -76,6 +77,13 @@ with open("coded_text.txt", "rb") as coded_text_file:
                     val -= first_q
                 else:
                     break
+                low_interval += low_interval
+                high_interval += high_interval + 1
+                k = in_put_bit(coded_text_file)
+                val += val + k
+                if (j == 1):
+                    break
                 output_file.write(list(dictionary.keys())[j-2].encode('ascii'))
                 diff = high_interval - low_interval + 1
 output_file.close()
+print("File has been decoded")
