@@ -30,7 +30,7 @@ def bit_plus_follow(bit, bittofollow, outputfile):
         out_put_bit(~bit, outputfile)
 
 dictionary_sum = 0
-with open('in.txt', 'r') as file:
+with open('input.txt', 'r') as file:
     text_sum = 0
     text = file.read(1)
     dictionary = {}
@@ -67,7 +67,7 @@ for i in dictionary:
     file.write(dictionary[i].to_bytes(4, "little"))
 # print(dictionary)
 
-with open('in.txt', 'r') as f:   # алгоритм кодирования
+with open('input.txt', 'r') as f:   # алгоритм кодирования
     low_interval = 0
     high_interval = (1 << 16) - 1
     delete = work_interval[-1]
