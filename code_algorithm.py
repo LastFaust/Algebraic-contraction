@@ -136,4 +136,4 @@ with open('input.txt', 'r') as f:   # алгоритм кодирования
     file.write(write_bit.to_bytes(1, "little"))
 
 file.close()
-print("U file has been succesfull coded")
+print("U file has been successful coded")
